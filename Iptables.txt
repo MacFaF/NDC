@@ -1,0 +1,59 @@
+-Debian
+
+#BLOCK ICMP PACKETS
+1. iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
+2. iptables -A INPUT -i to -j ACCEPT
+3. iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+______________________________________________________________
+#ALLOW ONLY TCP PACKETS
+
+1.iptables -A INPUT -p TCP --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+___________________________________________________________________
+#allow specific ip address
+1.iptables -F
+2.iptables -P INPUT DROP
+3.iptables -P OUTPT ACCEPT
+4.iptables -P FORWARD ACCEPT
+5.iptables -A INPUT -s 192.168.1.25 -j ACCEPT
+6.iptables -L
+_________________________________________________________________
+#ALLOW PORT RAnGE frop 1 to 1024
+iptables -A INPUT -p tcp --match multiport --dport 1:1024 -j ACCEPT
+__________________________________________________________________
+#ALLOW particular ip and mac address
+iptables -A INPUT -p tcp -s 192.168.1.200 -m mac --mac-source 00:0F:EA:91:04:08 -j DROP
+
+_______________________________________________________________________
+#ALLOW SSH TO THE SYSTEM
+iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+_______________________________________________________________________
+#ALLOW HTTP AND HTTPS TRAFFIC 
+iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+___________________________________________________________________________
+#ALLOW ALL SSH,HTTPS,HTTP TRAFFIC
+iptables -A INPUT -i eth0 -p tcp -m multiport --dport 80,443,22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+___________________________________________________________________________
+#ALLOW PING FROM OUTSIDE TO INSIDE
+1. iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+2. iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+____________________________________________________________________
+#ALLOW PING FROM INSIDE TO OUTSIDE
+1. iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+2. iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+________________________________________________________________________
+# ALLOW LOOPBACK ACCESS
+1.iptables -A INPUT -i lo -j ACCEPT
+
+allow loopback access to outside
+1.iptables -A OUTPUT -o lo -j ACCEPT
+
+__________________________________________________________________
+#PREVENT DOS ATTACK
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --time-burst 100 -j ACCEPT
+
+#T REMOVE RULES
+iptables -D INPUT 1

@@ -1,0 +1,16 @@
+1.apt-get install fail2ban
+2.ss -ant (port 22 shld be open)
+3.nano /etc/fail2ban/jail.conf
+4.ip a
+5.systemctl start ssh
+6.systemctl enable ssh
+7.ss -ant
+8.adduser user2
+9.systemctl start fail2ban
+10.systemctl enable fail2ban
+11.systemctl status fail2ban
+12.fail2ban-client status sshd
+13.ip a
+14.ssh user2@ip address
+-> enter wrong password 3 times
+15.fail2ban-client status sshd

@@ -1,0 +1,33 @@
+1) apt install apache2 apache2-utils php
+2) apt install -y build-essential autoconf gcc libc6 make wget unzip libgd2-xpm-dev
+3) useradd nagios && groupadd nagcmd
+4) usermod -a -G nagcmd nagios && usermod -a -G nagcmd www-data
+5) mkdir /opt/nagios
+6) cd /opt/nagios
+ 7) wget   nagios-4.4.3.tar.gz    
+8) tar xzf nagioscore.tar.gz
+9) cd nagioscore-nagios-4.3.2/
+10) ./configure --with-nagios-group=nagios --with-command-group=nagcmd --with-httpd_conf=/etc/apache2/sites-enabled/make 
+11) make all
+12) make install
+13) make install-init
+14) make install-commandmode
+15) make install-config
+16) make install-webconf
+17) a2enmod rewrite && a2enmod cgi
+18) htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+19) systemctl restart apache2.service
+20) apt install -y autoconf gcc libc6 libmcrypt-dev make libssl-dev wget bc gawk dc build-essential snmp libnet-snmp-perl gettext
+ 21) cd ..
+22) wget  nagios-plugins.tar.gz
+
+23) tar zxf nagios-plugins.tar.gz
+24) cd nagios-plugins-release-2.2.1
+25) ./tools/setup
+26) ./configure
+27) make all
+28)make install
+29) systemctl enable nagios
+30) systemctl start nagios
+31) systemctl status nagios 
+32) ip a on browser ip/nagios
